@@ -1,0 +1,82 @@
+/* Final overlay.css with absolute pixel positions */
+
+html, body {
+  margin:0; padding:0;
+  width:100%; height:100%;
+  background: transparent;
+  overflow:hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#overlay-root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+}
+
+/* Background image (base64 embedded) */
+#scoreboard-bg {
+  position: absolute;
+  top:0; left:0;
+  width:1920px; height:1080px;
+  background-image: url("./Valorant_scoreboard1.png");
+  background-size: cover;
+  pointer-events:none;
+}
+
+.abs {
+  position:absolute;
+  color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,0.8);
+  font-weight:600;
+}
+
+/* LEFT SIDE */
+#LL { left: 835px; top:25px; width:50px; height: 50px; }
+#LTN { left: 835px; top:65px; font-size:26px; }
+#LTS { left:836px; top:95px; font-size:15px; }
+#LS {
+  left:810px; top:46px;
+  font-size:32px;
+  transform:translate(-50%,-50%);
+}
+
+/* CENTER */
+#CL { left:calc(50% - 55px); top:10px; font-size:22px; text-align:right; }
+#CR { left:calc(50% + 35px); top:10px; font-size:22px; text-align:left; }
+#CT { left:50%; top:40px; font-size:30px; transform:translateX(-50%); text-align:center; }
+
+/* RIGHT SIDE */
+#RL { left:1035px; top:25px; width:50px; height:50px; }
+#RTN { left:1035px; top:65px; font-size:26px; text-align:right; }
+#RTS { left:1036px; top:95px; font-size:15px; text-align:right; }
+#RS {
+  left:1108px; top:46px;
+  font-size:32px;
+  transform:translate(-50%,-50%);
+}
+/* Bold only the important elements */
+#LS, #RS { font-weight:800; }
+#LTN, #RTN { font-weight:800; }
+/* Smooth fade transitions for any overlay element */
+.fade {
+    transition: opacity 0.25s ease;
+}
+
+.fade-hidden {
+    opacity: 0;
+}
+/* Spike Timer Red + Flicker */
+.spike-active {
+  color: #ff3b3b !important;       /* bright red */
+  animation: spikeFlicker 0.4s infinite alternate;
+}
+
+@keyframes spikeFlicker {
+  0%   { opacity: 1;   text-shadow: 0 0 6px #ff3b3b; }
+  50%  { opacity: 0.55; text-shadow: 0 0 14px #ff0000; }
+  100% { opacity: 1;   text-shadow: 0 0 6px #ff3b3b; }
+}
+
+
+

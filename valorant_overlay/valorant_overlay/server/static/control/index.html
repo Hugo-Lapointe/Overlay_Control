@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Overlay Control</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+      background: #0a0a0a; 
+      color: #e0e0e0; 
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 { 
+      text-align: center; 
+      margin-bottom: 8px; 
+      font-size: 28px;
+      color: #fff;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    
+    .card { 
+      background: #141414; 
+      border: 1px solid #222; 
+      padding: 18px; 
+      border-radius: 8px; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .card-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2b6df6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #222;
+    }
+    
+    .field { margin-bottom: 12px; }
+    label { 
+      display: block; 
+      font-size: 12px; 
+      color: #999; 
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    input { 
+      width: 100%; 
+      padding: 10px; 
+      border-radius: 4px; 
+      border: 1px solid #222; 
+      background: #0a0a0a; 
+      color: #fff;
+      font-size: 14px;
+    }
+    
+    input:focus { 
+      outline: none;
+      border-color: #2b6df6;
+      background: #111;
+    }
+    
+    select { 
+      width: 100%; 
+      padding: 10px; 
+      border-radius: 4px; 
+      border: 1px solid #222; 
+      background: #0a0a0a; 
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    select:focus { 
+      outline: none;
+      border-color: #2b6df6;
+      background: #111;
+    }
+    
+    select option {
+      background: #141414;
+      color: #fff;
+    }
+    
+    .control-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    
+    .control-group input {
+      flex: 1;
+    }
+    
+    button { 
+      padding: 10px 12px;
+      border-radius: 4px; 
+      border: 1px solid #2b6df6;
+      background: #2b6df6; 
+      color: white; 
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 0 0 auto;
+    }
+    
+    button:hover { 
+      background: #3a75ff;
+      border-color: #3a75ff;
+    }
+    
+    button:active { 
+      transform: translateY(1px);
+    }
+    
+    .shortcut {
+      font-size: 10px;
+      color: #666;
+      margin-top: 2px;
+    }
+    
+    .row { display: flex; gap: 12px; }
+    .row.tight {
+      gap: 6px;
+      align-items: flex-start;
+    }
+    
+    .col { 
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .col-auto { flex: 0 0 auto; }
+    
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    
+    .btn-group .shortcut {
+      margin: 0;
+      font-size: 9px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-danger {
+      background: #8b2f2f;
+      border-color: #c74444;
+      color: #ffb3b3;
+    }
+    
+    .btn-danger:hover {
+      background: #a03a3a;
+      border-color: #ff5555;
+    }
+    
+    .btn-success {
+      background: #2b6df6;
+      border-color: #3a75ff;
+    }
+    
+    .btn-success:hover {
+      background: #3a75ff;
+      border-color: #4a85ff;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(32, 42, 72, 0.95);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: translateY(12px);
+      z-index: 9999;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .section-title {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 12px 0 8px 0;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<h1>Overlay Control</h1>
+<div class="subtitle">Real-time scoreboard management</div>
+
+<div class="container">
+  
+  <!-- TEAMS -->
+  <div class="card">
+    <div class="card-header">📺 Teams</div>
+    
+    <div class="row">
+      <div class="col">
+        <div class="field">
+          <label>Left Team Name</label>
+          <input id="left-name" type="text" />
+        </div>
+        <div class="field">
+          <label>Left Team Logo</label>
+          <select id="left-logo">
+            <option value="">Select a logo...</option>
+            <option value="../overlay/assets/team-logos/ALL.png">ALL</option>
+            <option value="../overlay/assets/team-logos/ERN.png">ERN</option>
+            <option value="../overlay/assets/team-logos/MON.png">MON</option>
+            <option value="../overlay/assets/team-logos/MTL.png">MTL</option>
+            <option value="../overlay/assets/team-logos/NA.png">NA</option>
+            <option value="../overlay/assets/team-logos/NOV.png">NOV</option>
+            <option value="../overlay/assets/team-logos/RBX.png">RBX</option>
+            <option value="../overlay/assets/team-logos/RCN.webp">RCN</option>
+            <option value="../overlay/assets/team-logos/RDX.png">RDX</option>
+            <option value="../overlay/assets/team-logos/YFE.png">YFE</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Left Team Seed</label>
+          <input id="left-seed" type="number" min="1" />
+        </div>
+      </div>
+      
+      <div class="col">
+        <div class="field">
+          <label>Right Team Name</label>
+          <input id="right-name" type="text" />
+        </div>
+        <div class="field">
+          <label>Right Team Logo</label>
+          <select id="right-logo">
+            <option value="">Select a logo...</option>
+            <option value="../overlay/assets/team-logos/ALL.png">ALL</option>
+            <option value="../overlay/assets/team-logos/ERN.png">ERN</option>
+            <option value="../overlay/assets/team-logos/MON.png">MON</option>
+            <option value="../overlay/assets/team-logos/MTL.png">MTL</option>
+            <option value="../overlay/assets/team-logos/NA.png">NA</option>
+            <option value="../overlay/assets/team-logos/NOV.png">NOV</option>
+            <option value="../overlay/assets/team-logos/RBX.png">RBX</option>
+            <option value="../overlay/assets/team-logos/RCN.webp">RCN</option>
+            <option value="../overlay/assets/team-logos/RDX.png">RDX</option>
+            <option value="../overlay/assets/team-logos/YFE.png">YFE</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Right Team Seed</label>
+          <input id="right-seed" type="number" min="1" />
+        </div>
+      </div>
+    </div>
+    
+    <button id="btn-toggle-sides" style="margin-top: 12px;">↔ Flip Scoreboard Sides</button>
+  </div>
+
+  <!-- SCORES & ROUND -->
+  <div class="card">
+    <div class="card-header">🎯 Match Control</div>
+    
+    <div class="field">
+      <label>Left Team Score</label>
+      <div class="control-group tight">
+        <div class="btn-group">
+          <button id="left-score-dec" class="btn-small">−</button>
+          <div class="shortcut">Q</div>
+        </div>
+        <input id="left-score" type="number" min="0" />
+        <div class="btn-group">
+          <button id="left-score-inc" class="btn-small">+</button>
+          <div class="shortcut">1</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label>Right Team Score</label>
+      <div class="control-group tight">
+        <div class="btn-group">
+          <button id="right-score-dec" class="btn-small">−</button>
+          <div class="shortcut">W</div>
+        </div>
+        <input id="right-score" type="number" min="0" />
+        <div class="btn-group">
+          <button id="right-score-inc" class="btn-small">+</button>
+          <div class="shortcut">2</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-title">Round</div>
+    <div class="field">
+      <div class="control-group tight">
+        <div class="btn-group">
+          <button id="round-dec" class="btn-small">−</button>
+          <div class="shortcut">A</div>
+        </div>
+        <input id="round-number" type="number" min="1" />
+        <div class="btn-group">
+          <button id="round-inc" class="btn-small">+</button>
+          <div class="shortcut">S</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMER PRESETS -->
+  <div class="card">
+    <div class="card-header">⏱ Timer Presets</div>
+    
+    <div class="field">
+      <label>Buy Phase (seconds)</label>
+      <div class="control-group">
+        <input id="timer-buy-seconds" type="number" value="29" min="1" />
+        <div class="btn-group">
+          <button id="btn-timer-buy" class="col-auto">Start</button>
+          <div class="shortcut">B</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label>Round Timer (seconds)</label>
+      <div class="control-group">
+        <input id="timer-round-seconds" type="number" value="99" min="1" />
+        <div class="btn-group">
+          <button id="btn-timer-round" class="col-auto">Start</button>
+          <div class="shortcut">R</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label>Spike Timer (seconds)</label>
+      <div class="control-group">
+        <input id="timer-spike-seconds" type="number" value="44" min="1" />
+        <div class="btn-group">
+          <button id="btn-timer-spike" class="col-auto">Start</button>
+          <div class="shortcut">X</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label>Timeout (seconds)</label>
+      <div class="control-group">
+        <input id="timer-timeout-seconds" type="number" value="59" min="1" />
+        <div class="btn-group">
+          <button id="btn-timer-timeout" class="col-auto">Start</button>
+          <div class="shortcut">O</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM TIMER -->
+  <div class="card">
+    <div class="card-header">⏲ Custom Timer</div>
+    
+    <div class="field">
+      <label>Timer Value (seconds)</label>
+      <div class="control-group">
+        <input id="timer-custom-seconds" type="number" value="60" min="1" />
+        <div class="btn-group">
+          <button id="btn-timer-custom-start" class="col-auto">Start</button>
+          <div class="shortcut">T</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-title">Display</div>
+    <div class="field">
+      <input id="round-timer" type="text" readonly placeholder="0:00" style="background: #0a0a0a; cursor: not-allowed;" />
+    </div>
+    
+    <div class="section-title">Controls</div>
+    <div class="row tight">
+      <div class="btn-group">
+        <button id="btn-timer-custom-pause" class="col">Pause</button>
+        <div class="shortcut">P</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-timer-custom-clear" class="col btn-danger">Clear</button>
+        <div class="shortcut">C</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-timer-stop" class="col btn-danger">Stop</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="control.js"></script>
+</body>
+</html>
+
+
+

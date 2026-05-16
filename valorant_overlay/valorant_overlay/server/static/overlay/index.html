@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Valorant Overlay</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="overlay.css" />
+
+  <!-- FORCE FULL TRANSPARENCY FOR OBS -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: rgba(0,0,0,0) !important;
+    }
+
+    #overlay-root {
+      background: rgba(0,0,0,0) !important;
+    }
+  </style>
+</head>
+
+
+<body style="background: transparent;">
+
+  <div id="overlay-root">
+
+    <!-- Background scoreboard -->
+    <img id="scoreboard-bg" src="Valorant_scoreboard1.png" alt="scoreboard">
+
+    <!-- LEFT SIDE -->
+    <img id="LL" class="abs team-logo left-team fade" src="logo-left.png" alt="left logo">
+
+    <div id="LTN" class="abs team-name left-team fade">TEAM LEFT</div>
+    <div id="LTS" class="abs team-seed left-team fade">SEED 1</div>
+
+    <div id="LS" class="abs team-score left-team fade">14</div>
+
+    <!-- CENTER -->
+    <div id="CL" class="abs round-label"></div>
+    <div id="CR" class="abs round-number"></div>
+    <div id="CT" class="abs round-timer"></div>
+
+    <!-- RIGHT SIDE -->
+    <img id="RL" class="abs team-logo right-team fade" src="logo-right.png" alt="right logo">
+
+    <div id="RTN" class="abs team-name right-team fade">TEAM RIGHT</div>
+    <div id="RTS" class="abs team-seed right-team fade">SEED 2</div>
+
+    <div id="RS" class="abs team-score right-team fade">14</div>
+
+  </div>
+
+  <script src="overlay.js"></script>
+</body>
+</html>
